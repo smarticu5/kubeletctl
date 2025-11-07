@@ -108,6 +108,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVarP(&caFlag, "cacert", "", "", "CA certificate (example: /etc/kubernetes/pki/ca.crt )")
 	RootCmd.PersistentFlags().StringVarP(&certFlag, "cert", "", "", "Private key (example: /var/lib/kubelet/pki/kubelet-client-current.pem)")
 	RootCmd.PersistentFlags().StringVarP(&keyFlag, "key", "", "", "Digital certificate (example: /var/lib/kubelet/pki/kubelet-client-current.pem)")
+	RootCmd.PersistentFlags().BoolVarP(&api.UseSPDYExecutor, "use-spdy", "", false, "Use legacy SPDY executor instead of WebSocket (default: false)")
 
 	pf := RootCmd.PersistentFlags()
 	pf.StringVarP(&ServerIpAddressFlag, "server", "s", "", "Server address (format: x.x.x.x. For Example: 123.123.123.123)")

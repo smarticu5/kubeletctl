@@ -59,9 +59,32 @@ func Exec(serverIp string, serverPort string, serverFullAddress string, apiPath 
 		RawQuery: fmt.Sprintf("%s&input=1&output=1&tty=1", queryCommands),
 	}
 
-	exec, err := remotecommand.NewSPDYExecutor(config, method, urlObject)
-	if err != nil {
-		fmt.Println(err)
+	// Create executor based on the flag
+	var exec remotecommand.Executor
+	var err error
+
+	if UseSPDYExecutor {
+		// Use legacy SPDY executor
+		exec, err = remotecommand.NewSPDYExecutor(config, method, urlObject)
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		// Use WebSocket executor (default)
+		// The protocols define the WebSocket subprotocols in order of preference
+		exec, err = remotecommand.NewWebSocketExecutorForProtocols(
+			config,
+			method,
+			urlObject.String(),
+			"v5.channel.k8s.io",
+			"v4.channel.k8s.io",
+			"v3.channel.k8s.io",
+			"v2.channel.k8s.io",
+			"channel.k8s.io",
+		)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 
 	// Credit to this blog post https://www.henryxieblogs.com/2019/05/

@@ -25,3 +25,6 @@ const (
 	CRI              string = "/cri/exec"
 	CHECKPOINT       string = "/checkpoint"
 )
+
+// Global variable for executor type (websocket or spdy)
+var UseSPDYExecutor bool
